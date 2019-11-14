@@ -1,8 +1,9 @@
-for file in $(find ./input -type f -name "*.svg"); 
+IFS=$'\n'
+for file in $(find ./input -type f -name "*.svg");
 
 
-do 
+do
 
- node svgo.js $file
+ node index.js "$file"
 
 done;
