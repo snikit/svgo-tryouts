@@ -4,6 +4,8 @@
   const png2svg = require('svg-png-converter').png2svg;
   const DOMParser = require('dom-parser');
   const SVGO = require('svgo');
+  const prettier = require('pretty-data').pd;
+
   const svgo = new SVGO({
     plugins: [
       {
@@ -104,6 +106,9 @@
       },
       {
         removeDimensions: true
+      },
+      {
+        pretty: true
       }
     ]
   });
@@ -150,7 +155,8 @@
       optimize: true,
       turdSize: 0,
       optTolerance: 0.9,
-      rangeDistribution: 'equal'
+      rangeDistribution: 'equal',
+      color: '#808080'
     }).then((buffer) => {
       const xmlDoc = parser.parseFromString(buffer.content, 'text/xml');
       const paths = xmlDoc.getElementsByTagName('path');
@@ -184,11 +190,9 @@
       //svg otpt
       FS.writeFileSync(
         oFnameSample1,
-        `<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?>
-        <svg xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"   width="100%" height="100%" >
+        prettier.xml(`<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?><svg xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"   width="100%" height="100%" >
         ${allPathsConcat}
-        </svg>
-            `
+        </svg>`)
       );
 
       log(`reading temp file 2 ${oFnameSample2}`);
@@ -196,7 +200,7 @@
 
       log(`plain svgo optimisation ${oFnameSample2}   ->`);
       svgo.optimize(svgData).then((optimizedSvg) => {
-        FS.writeFileSync(oFnameSample2, optimizedSvg.data);
+        FS.writeFileSync(oFnameSample2, prettier.xml(optimizedSvg.data));
       });
     });
   });
