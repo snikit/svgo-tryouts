@@ -113,7 +113,7 @@
     ]
   });
   const parser = new DOMParser();
-  const comVariable = 2500;
+  const dimensions = 2500;
   const log = console.log;
   const fname = process.argv[2];
   const TEMP_FILE_APPEND = '_.svg';
@@ -139,11 +139,11 @@
     log(`canvas resizing ${fname}   ->`);
 
     log('image read');
-    image.width = comVariable;
-    image.height = comVariable;
-    const canvas = createCanvas(comVariable, comVariable);
+    image.width = dimensions;
+    image.height = dimensions;
+    const canvas = createCanvas(dimensions, dimensions);
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(image, 0, 0, comVariable, comVariable);
+    ctx.drawImage(image, 0, 0, dimensions, dimensions);
     log('image drawn on canvas');
     const png = canvas.toDataURL();
 
@@ -190,7 +190,7 @@
       //svg otpt
       FS.writeFileSync(
         oFnameSample1,
-        prettier.xml(`<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?><svg xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"   width="100%" height="100%" >
+        prettier.xml(`<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?><svg xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"  viewbox="0 0 100 100"   width="${dimensions}" height=""${dimensions}" >
         ${allPathsConcat}
         </svg>`)
       );
