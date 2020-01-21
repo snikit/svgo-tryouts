@@ -48,7 +48,7 @@
         removeEmptyContainers: true
       },
       {
-        removeViewBox: false
+        removeViewBox: true		//changed
       },
       {
         cleanupEnableBackground: true
@@ -72,25 +72,25 @@
         removeNonInheritableGroupAttrs: true
       },
       {
-        removeUselessStrokeAndFill: true
+        removeUselessStrokeAndFill: false   //changed
       },
       {
         removeUnusedNS: true
       },
       {
-        cleanupIDs: true
+        cleanupIDs: false			//changed
       },
       {
         cleanupNumericValues: true
       },
       {
-        moveElemsAttrsToGroup: true
+        moveElemsAttrsToGroup: false   //changed
       },
       {
         moveGroupAttrsToElems: true
       },
       {
-        collapseGroups: true
+        collapseGroups: false		//changed
       },
       {
         removeRasterImages: false
@@ -102,13 +102,10 @@
         convertShapeToPath: true
       },
       {
-        sortAttrs: true
+        sortAttrs: false   //changed
       },
       {
-        removeDimensions: true
-      },
-      {
-        pretty: true
+        removeDimensions: false  //Changed
       }
     ]
   });
@@ -173,17 +170,19 @@
       });
 
       let allPathsConcat = '';
+	  let fillAllow = true;
 
       optimizedPaths.forEach((path, index) => {
         let temPath = '';
 
         if (index == paths.length - 1) {
           temPath = `<path class="line" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="${path.fill}" />`;
-        } else {
-          temPath = `<path class="fill" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="#fff" />`;
+        } else if(fillAllow == true) {
+			fillAllow = false;
+			temPath = `<path class="fill" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="#fff" />`;
         }
-
-        allPathsConcat += temPath;
+		if(temPath !== '')
+			allPathsConcat += temPath;
       });
 
       console.log(`writing ${oFnameSample1}`);
@@ -211,12 +210,12 @@
 
   log(`removing bigger output`);
 
-  if (stat1.size < stat2.size) {
-    FS.unlinkSync(oFnameSample2);
-  } else {
-    FS.unlinkSync(oFnameSample1);
-    FS.renameSync(oFnameSample2, oFnameSample2.replace(TEMP_FILE_APPEND, '.svg'));
-  }
+  // if (stat1.size < stat2.size) {
+  //   FS.unlinkSync(oFnameSample2);
+  // } else {
+  //   FS.unlinkSync(oFnameSample1);
+  //   FS.renameSync(oFnameSample2, oFnameSample2.replace(TEMP_FILE_APPEND, '.svg'));
+  // }
 
   log(`done for ${fname}`);
 })();
