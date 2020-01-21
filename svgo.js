@@ -190,7 +190,7 @@
       //svg otpt
       FS.writeFileSync(
         oFnameSample1,
-        prettier.xml(`<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?><svg xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"  viewbox="0 0 100 100"   width="${dimensions}" height=""${dimensions}" >
+        prettier.xml(`<?xml version = "1.0" encoding = "UTF-8" standalone = "no" ?><svg xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"  viewbox="0 0 100 100"   width="${dimensions}" height="${dimensions}" >
         ${allPathsConcat}
         </svg>`)
       );
