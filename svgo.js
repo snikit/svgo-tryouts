@@ -113,7 +113,7 @@
   const dimensions = 2500;
   const log = console.log;
   const fname = process.argv[2];
-  const fillreplacecolor = process.argv[3];
+  const fillreplacecolor = process.argv[3] ? `#${process.argv[3]}` : null;
 
   const TEMP_FILE_APPEND = '_.svg';
 
@@ -189,7 +189,7 @@
 
       console.log(`writing ${oFnameSample1}`);
 
-      if (fillreplacecolor) {
+      if (fillreplacecolor != null) {
         allPathsConcat = allPathsConcat.replace(/#fff/gi, fillreplacecolor);
       }
       //svg otpt
