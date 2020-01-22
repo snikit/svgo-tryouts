@@ -48,7 +48,7 @@
         removeEmptyContainers: true
       },
       {
-        removeViewBox: true		//changed
+        removeViewBox: true //changed
       },
       {
         cleanupEnableBackground: true
@@ -72,25 +72,25 @@
         removeNonInheritableGroupAttrs: true
       },
       {
-        removeUselessStrokeAndFill: false   //changed
+        removeUselessStrokeAndFill: false //changed
       },
       {
         removeUnusedNS: true
       },
       {
-        cleanupIDs: false			//changed
+        cleanupIDs: false //changed
       },
       {
         cleanupNumericValues: true
       },
       {
-        moveElemsAttrsToGroup: false   //changed
+        moveElemsAttrsToGroup: false //changed
       },
       {
         moveGroupAttrsToElems: true
       },
       {
-        collapseGroups: false		//changed
+        collapseGroups: false //changed
       },
       {
         removeRasterImages: false
@@ -102,10 +102,10 @@
         convertShapeToPath: true
       },
       {
-        sortAttrs: false   //changed
+        sortAttrs: false //changed
       },
       {
-        removeDimensions: false  //Changed
+        removeDimensions: false //Changed
       }
     ]
   });
@@ -113,6 +113,8 @@
   const dimensions = 2500;
   const log = console.log;
   const fname = process.argv[2];
+  const fillreplacecolor = process.argv[3];
+
   const TEMP_FILE_APPEND = '_.svg';
 
   // init----------------------------->
@@ -125,6 +127,7 @@
   log(`processing ${fname}`);
 
   log(`creating temp file 1 ${oFnameSample1}`);
+
   FS.writeFileSync(oFnameSample1, data.replace(/#ffffff/gi, '#8510d8'));
 
   log(`creating temp file 2 ${oFnameSample2}`);
@@ -170,22 +173,25 @@
       });
 
       let allPathsConcat = '';
-	  let fillAllow = true;
+      let fillAllow = true;
 
       optimizedPaths.forEach((path, index) => {
         let temPath = '';
 
         if (index == paths.length - 1) {
           temPath = `<path class="line" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="${path.fill}" />`;
-        } else if(fillAllow == true) {
-			fillAllow = false;
-			temPath = `<path class="fill" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="#fff" />`;
+        } else if (fillAllow == true) {
+          fillAllow = false;
+          temPath = `<path class="fill" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="#fff" />`;
         }
-		if(temPath !== '')
-			allPathsConcat += temPath;
+        if (temPath !== '') allPathsConcat += temPath;
       });
 
       console.log(`writing ${oFnameSample1}`);
+
+      if (fillreplacecolor) {
+        allPathsConcat = allPathsConcat.replace(/#fff/gi, fillreplacecolor);
+      }
       //svg otpt
       FS.writeFileSync(
         oFnameSample1,
@@ -210,12 +216,12 @@
 
   log(`removing bigger output`);
 
-  // if (stat1.size < stat2.size) {
-  //   FS.unlinkSync(oFnameSample2);
-  // } else {
-  //   FS.unlinkSync(oFnameSample1);
-  //   FS.renameSync(oFnameSample2, oFnameSample2.replace(TEMP_FILE_APPEND, '.svg'));
-  // }
+  if (stat1.size < stat2.size) {
+    FS.unlinkSync(oFnameSample2);
+  } else {
+    FS.unlinkSync(oFnameSample1);
+    FS.renameSync(oFnameSample2, oFnameSample2.replace(TEMP_FILE_APPEND, '.svg'));
+  }
 
   log(`done for ${fname}`);
 })();
