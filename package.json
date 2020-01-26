@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "sh init.sh",
+    "mine": "sh mine.sh",
+    "just": "sh just.sh",
     "fixold": "node support.js"
   },
   "repository": {

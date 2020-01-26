@@ -110,7 +110,7 @@
     ]
   });
   const parser = new DOMParser();
-  const dimensions = 4000;
+  const dimensions = 3500;
   const log = console.log;
   const fname = process.argv[2];
   const fillreplacecolor = process.argv[3] ? `#${process.argv[3]}` : null;
@@ -122,16 +122,12 @@
   log(`reading ${fname}`);
   const data = FS.readFileSync(fname).toString();
 
-  const oFnameSample1 = fname.replace('input', 'output');
-  const oFnameSample2 = fname.replace('input', 'output').replace('.svg', TEMP_FILE_APPEND);
+  const oFnameSample1 = fname.replace('input', 'mine_output');
   log(`processing ${fname}`);
 
   log(`creating temp file 1 ${oFnameSample1}`);
 
-  FS.writeFileSync(oFnameSample1, data.replace(/#ffffff/gi, '#8510d8'));
-
-  log(`creating temp file 2 ${oFnameSample2}`);
-  FS.writeFileSync(oFnameSample2, data);
+  FS.writeFileSync(oFnameSample1, data.replace(/#ada9a9/gi, '#8510d8'));
 
   // canvas resizing ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -182,7 +178,7 @@
           temPath = `<path class="line" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="${path.fill}" />`;
         } else if (fillAllow == true) {
           fillAllow = false;
-          temPath = `<path class="fill" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="#fff" />`;
+          temPath = `<path class="fill" d="${path.d}" fill-rule="${path['fill-rule']}" stroke ="${path.stroke}" fill="#ada9a9" />`;
         }
         if (temPath !== '') allPathsConcat += temPath;
       });
@@ -199,29 +195,8 @@
         ${allPathsConcat}
         </svg>`)
       );
-
-      log(`reading temp file 2 ${oFnameSample2}`);
-      const svgData = FS.readFileSync(oFnameSample2).toString();
-
-      log(`plain svgo optimisation ${oFnameSample2}   ->`);
-      svgo.optimize(svgData).then((optimizedSvg) => {
-        FS.writeFileSync(oFnameSample2, prettier.xml(optimizedSvg.data));
-      });
     });
   });
-
-  log(`comparing conversions`);
-  const stat1 = FS.statSync(oFnameSample1);
-  const stat2 = FS.statSync(oFnameSample2);
-
-  log(`removing bigger output`);
-
-  if (stat1.size < stat2.size) {
-    FS.unlinkSync(oFnameSample2);
-  } else {
-    FS.unlinkSync(oFnameSample1);
-    FS.renameSync(oFnameSample2, oFnameSample2.replace(TEMP_FILE_APPEND, '.svg'));
-  }
 
   log(`done for ${fname}`);
 })();
